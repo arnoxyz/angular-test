@@ -53,6 +53,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/angular-test/",
               "budgets": [
                 {
                   "type": "initial",
@@ -92,6 +93,9 @@
           "options": {
             "buildTarget": "first-app:build"
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
