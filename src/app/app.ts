@@ -9,16 +9,17 @@ import { ButtonModule } from "primeng/button";
   imports: [Home, RouterModule, ButtonModule],
   template: `
     <main>
-      <a [routerLink]="['/']">
-        <header class="brand-name">
+      <header class="brand-name">
+        <a [routerLink]="['/']">
           <img
             class="brand-logo"
             src="./assets/logo.svg"
             alt="logo"
             aria-hidden="true"
           />
-        </header>
-      </a>
+        </a>
+        <p-button label="Toggle" (onClick)="toggleDarkMode()"></p-button>
+      </header>
       <section class="content">
         <router-outlet></router-outlet>
       </section>
@@ -28,4 +29,9 @@ import { ButtonModule } from "primeng/button";
 })
 export class App {
   title = "homes";
+
+  toggleDarkMode() {
+    const element = document.querySelector("html");
+    element?.classList.toggle("my-app-dark");
+  }
 }
