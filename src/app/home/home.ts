@@ -71,7 +71,7 @@ import { RouterLink, RouterOutlet } from "@angular/router";
 
       <ng-template #footer>
         <tr>
-          <td colspan="6">
+          <td colspan="8">
             In total there are {{ filteredLocationArr.length }}
           </td>
         </tr>
