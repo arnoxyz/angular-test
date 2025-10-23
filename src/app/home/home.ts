@@ -32,7 +32,6 @@ import { RouterLink, RouterOutlet } from "@angular/router";
       showGridlines
       stripedRows
       [tableStyle]="{ 'min-width': '50rem' }"
-      [size]="selectedSize"
     >
       <ng-template #header>
         <tr>
