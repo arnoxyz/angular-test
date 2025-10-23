@@ -25,18 +25,12 @@ import { RouterLink, RouterOutlet } from "@angular/router";
       </form>
     </section>
 
-    <div class="flex justify-center mb-4">
-      <p-selectbutton
-        [options]="sizes"
-        [(ngModel)]="selectedSize"
-        [multiple]="false"
-        optionLabel="name"
-        optionValue="value"
-      />
-    </div>
-
     <p-table
       [value]="filteredLocationArr"
+      [paginator]="true"
+      [rows]="4"
+      showGridlines
+      stripedRows
       [tableStyle]="{ 'min-width': '50rem' }"
       [size]="selectedSize"
     >
@@ -107,12 +101,4 @@ export class Home {
         housingLocation?.city.toLowerCase().includes(text.toLowerCase())
     );
   }
-
-  sizes = [
-    { name: "Small", value: "S" },
-    { name: "Medium", value: "M" },
-    { name: "Large", value: "L" },
-  ];
-
-  selectedSize: "small" | "large" | undefined = undefined;
 }
