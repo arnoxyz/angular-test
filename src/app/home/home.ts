@@ -1,21 +1,46 @@
-import { Component, inject } from '@angular/core';
-import { HousingLocation } from '../housing-location/housing-location';
-import { HousingLocationInfo } from '../housinglocation';
-import { HousingService } from '../housing.service';
+import { Component, inject } from "@angular/core";
+import { HousingLocationInfo } from "../housinglocation";
+import { HousingService } from "../housing.service";
+import { FormsModule } from "@angular/forms";
 
+import { TableModule } from "primeng/table";
+import { SelectButton } from "primeng/selectbutton";
 
-
-import { TableModule } from 'primeng/table'
+import { RouterLink, RouterOutlet } from "@angular/router";
 
 @Component({
-  selector: 'app-home',
-  imports: [
-    HousingLocation,
-    TableModule
-  ],
+  selector: "app-home",
+  imports: [TableModule, SelectButton, FormsModule, RouterLink, RouterOutlet],
   template: `
-    <p-table [value]="locations">
-      <ng-template pTemplate="header">
+    <section>
+      <form>
+        <input type="text" placeholder="Filter by city" #filter />
+        <button
+          class="primary"
+          type="button"
+          (click)="filterResults(filter.value)"
+        >
+          Search
+        </button>
+      </form>
+    </section>
+
+    <div class="flex justify-center mb-4">
+      <p-selectbutton
+        [options]="sizes"
+        [(ngModel)]="selectedSize"
+        [multiple]="false"
+        optionLabel="name"
+        optionValue="value"
+      />
+    </div>
+
+    <p-table
+      [value]="filteredLocationArr"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [size]="selectedSize"
+    >
+      <ng-template #header>
         <tr>
           <th>Photo</th>
           <th>Name</th>
@@ -24,39 +49,43 @@ import { TableModule } from 'primeng/table'
           <th>Units</th>
           <th>WiFi</th>
           <th>Laundry</th>
+          <th>Details</th>
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-location>
+      <ng-template #body let-location>
         <tr>
           <td>
-            <img [src]="location.photo" alt="Photo" width="100" height="100" style="border-radius: 6px;" />
+            <img
+              [src]="location.photo"
+              [alt]="location.name"
+              width="100"
+              height="100"
+              style="border-radius: 6px;"
+            />
           </td>
           <td>{{ location.name }}</td>
           <td>{{ location.city }}</td>
           <td>{{ location.state }}</td>
           <td>{{ location.availableUnits }}</td>
-          <td>{{ location.wifi ? 'Yes' : 'No' }}</td>
-          <td>{{ location.laundry ? 'Yes' : 'No' }}</td>
+          <td>{{ location.wifi ? "Yes" : "No" }}</td>
+          <td>{{ location.laundry ? "Yes" : "No" }}</td>
+          <td>
+            <a [routerLink]="['/details', location.id]">Learn More</a>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #footer>
+        <tr>
+          <td colspan="6">
+            In total there are {{ filteredLocationArr.length }}
+          </td>
         </tr>
       </ng-template>
     </p-table>
-
-     <section>
-      <form>
-        <input type="text" placeholder="Filter by city" #filter />
-        <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
-      </form>
-    </section>
-
-    <section class="results">
-      @for (houseData of filteredLocationArr; track $index) { 
-        <app-housing-location [housingLocation]="houseData"></app-housing-location>
-      }
-
-    </section>
   `,
-  styleUrls: ['./home.css'],
+  styleUrls: ["./home.css"],
 })
 export class Home {
   housingLocationArr: HousingLocationInfo[] = []; //use interface
@@ -73,42 +102,17 @@ export class Home {
       this.filteredLocationArr = this.housingLocationArr;
       return;
     }
-    this.filteredLocationArr = this.housingLocationArr.filter((housingLocation) =>
-      housingLocation?.city.toLowerCase().includes(text.toLowerCase()),
+    this.filteredLocationArr = this.housingLocationArr.filter(
+      (housingLocation) =>
+        housingLocation?.city.toLowerCase().includes(text.toLowerCase())
     );
   }
 
-
-  locations = [
-    {
-      id: 0,
-      name: 'Acme Fresh Start Housing',
-      city: 'Chicago',
-      state: 'IL',
-      photo: 'https://angular.dev/assets/images/tutorials/common/bernard-hermant-CLKGGwIBTaY-unsplash.jpg',
-      availableUnits: 4,
-      wifi: true,
-      laundry: true
-    },
-    {
-      id: 1,
-      name: 'A113 Transitional Housing',
-      city: 'Santa Monica',
-      state: 'CA',
-      photo: 'https://angular.dev/assets/images/tutorials/common/brandon-griggs-wR11KBaB86U-unsplash.jpg',
-      availableUnits: 0,
-      wifi: false,
-      laundry: true
-    },
-    {
-      id: 2,
-      name: 'Warm Beds Housing Support',
-      city: 'Juneau',
-      state: 'AK',
-      photo: 'https://angular.dev/assets/images/tutorials/common/i-do-nothing-but-love-lAyXdl1-Wmc-unsplash.jpg',
-      availableUnits: 1,
-      wifi: false,
-      laundry: false
-    }
+  sizes = [
+    { name: "Small", value: "S" },
+    { name: "Medium", value: "M" },
+    { name: "Large", value: "L" },
   ];
+
+  selectedSize: "small" | "large" | undefined = undefined;
 }
