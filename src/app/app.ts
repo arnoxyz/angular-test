@@ -12,10 +12,11 @@ import { ButtonModule } from "primeng/button";
       <header class="brand-name">
         <a [routerLink]="['/']">
           <img
-            class="brand-logo"
-            src="./assets/logo.svg"
+            class="brand-logo light-logo"
+            [src]="
+              isDarkMode ? './assets/logo-dark.svg' : './assets/logo-light.svg'
+            "
             alt="logo"
-            aria-hidden="true"
           />
         </a>
         <p-button label="Toggle" (onClick)="toggleDarkMode()"></p-button>
@@ -29,8 +30,10 @@ import { ButtonModule } from "primeng/button";
 })
 export class App {
   title = "homes";
+  isDarkMode = false;
 
   toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
     const element = document.querySelector("html");
     element?.classList.toggle("my-app-dark");
   }

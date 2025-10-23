@@ -13,3 +13,8 @@ header {
 .content {
   padding: var(--content-padding);
 }
+
+img body.dark-theme {
+  background-color: #121212;
+  color: #fff;
+}
